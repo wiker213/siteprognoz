@@ -116,12 +116,12 @@ def login(
         role=user.role,
     )
 
+    _set_auth_cookie(response, token)
 
     return {
-    "status": "ok",
-    "token": token,
-    "user": UserOut.model_validate(user).model_dump(),
-}
+        "status": "ok",
+        "user": UserOut.model_validate(user).model_dump(),
+    }
 
 
 @router.post("/logout")
