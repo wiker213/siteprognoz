@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Авторизация</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="login-page">
+
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <h2>Авторизация</h2>
+
+    <p class="hint">
+      Войдите в аккаунт администратора или обычного пользователя.
+    </p>
+
+    <label for="login">Логин или email</label>
+    <input id="login" placeholder="admin или user@example.com">
+
+    <label for="password">Пароль</label>
+    <input id="password" type="password" placeholder="Введите пароль">
+
+    <button class="btn btn-wide" id="btnLogin">
+      Войти
+    </button>
+
+    <div id="loginStatus" class="out">
+      Введите логин и пароль
+    </div>
+
+    <div class="hint small">
+      Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="./js/api.js"></script>
+<script src="./js/login.js"></script>
+
+</body>
+</html>

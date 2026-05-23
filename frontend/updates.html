@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Обновления</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-badge"></span>
+      <span>Прогноз</span>
+    </a>
+
+    <nav>
+       <a href="index.html" id="nav-home">Главная</a>
+      <a href="calc.html" id="nav-calc">Расчёт</a>
+      <a href="forecast.html" id="nav-forecast">Прогноз</a>
+      <a href="charts.html" id="nav-charts">Графики</a>
+      <a href="updates.html" id="nav-updates">Обновления</a>
+      <a href="login.html" id="nav-login">Вход</a>
+      <a href="register.html" id="nav-register">Регистрация</a>
+      <a href="account.html" id="nav-account">Кабинет</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+const map={
+"index.html":"nav-home",
+"calc.html":"nav-calc",
+"forecast.html":"nav-forecast",
+"charts.html":"nav-charts",
+"updates.html":"nav-updates"
+};
+
+const file=location.pathname.split("/").pop()||"index.html";
+const id=map[file];
+
+if(id){
+document.getElementById(id).classList.add("active");
+}
+</script>
+
+<div class="container">
+<div class="grid">
+
+<div class="card glow span5">
+
+<h1>Обновления данных</h1>
+
+<p>
+На этой странице отображается информация о последних обновлениях
+экономических показателей региона.
+</p>
+
+<div class="hint">
+Данные обновляются ежемесячно на основе официальной статистики.
+</div>
+
+<div id="lastUpdate" class="out">
+Загрузка последнего обновления...
+</div>
+
+</div>
+
+
+<div class="card span7">
+
+<h2>История обновлений</h2>
+
+<div id="updatesList">
+Загрузка...
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script src="js/api.js"></script>
+
+<script>
+
+async function loadUpdates(){
+
+const updates = await fetch(API_URL + "/updates")
+.then(r => r.json())
+
+const container = document.getElementById("updatesList")
+
+container.innerHTML=""
+
+updates.forEach(update =>{
+
+const block=document.createElement("div")
+
+block.className="card"
+
+block.innerHTML=`
+<h3>Обновление: ${update.date}</h3>
+
+<p><b>Источник:</b> ${update.source}</p>
+
+<p><b>Обновлены показатели:</b></p>
+
+<ul>
+${update.indicators.map(i=>`<li>${i}</li>`).join("")}
+</ul>
+`
+
+container.appendChild(block)
+
+})
+
+}
+
+async function loadLastUpdate(){
+
+const update = await fetch(API_URL + "/updates/latest")
+.then(r => r.json())
+
+const el=document.getElementById("lastUpdate")
+
+if(!update){
+el.innerText="Нет данных"
+return
+}
+
+el.innerText=
+update.date +
+" — обновлены: " +
+update.indicators.join(", ")
+
+}
+
+loadUpdates()
+loadLastUpdate()
+
+</script>
+
+</body>
+</html>

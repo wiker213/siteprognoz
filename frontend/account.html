@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-badge"></span>
+      <span>Прогноз</span>
+    </a>
+
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="calc.html">Расчёт</a>
+      <a href="forecast.html">Прогноз</a>
+      <a href="charts.html">Графики</a>
+      <a href="updates.html">Обновления</a>
+      <a href="account.html" class="active">Кабинет</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <div class="grid">
+
+    <div class="card glow span6">
+      <h1>Личный кабинет</h1>
+
+      <div id="accountInfo" class="out">
+        Загрузка...
+      </div>
+
+      <div class="actions">
+        <a class="btn secondary" href="forecast.html">Перейти к прогнозу</a>
+        <button class="btn" id="btnLogout">Выйти</button>
+      </div>
+    </div>
+
+    <div class="card span6">
+      <h2>Возможности аккаунта</h2>
+      <div class="hint">
+        • просмотр личной информации<br>
+        • доступ к расчётам и прогнозам<br>
+        • сохранение роли пользователя<br>
+        • отдельный доступ для администратора
+      </div>
+
+      <div id="adminLink"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/account.js"></script>
+
+</body>
+</html>

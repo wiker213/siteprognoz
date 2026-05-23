@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Расчёт показателей</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-badge"></span>
+      <span>Прогноз</span>
+    </a>
+
+    <nav>
+      <a href="index.html" id="nav-home">Главная</a>
+      <a href="calc.html" id="nav-calc">Расчёт</a>
+      <a href="forecast.html" id="nav-forecast">Прогноз</a>
+      <a href="charts.html" id="nav-charts">Графики</a>
+      <a href="updates.html" id="nav-updates">Обновления</a>
+      <a href="login.html" id="nav-login">Вход</a>
+      <a href="register.html" id="nav-register">Регистрация</a>
+      <a href="account.html" id="nav-account">Кабинет</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const map={"index.html":"nav-home","calc.html":"nav-calc","forecast.html":"nav-forecast","charts.html":"nav-charts","updates.html":"nav-updates"};
+  const file=location.pathname.split("/").pop()||"index.html";
+  const id=map[file]; if(id) document.getElementById(id).classList.add("active");
+</script>
+
+<div class="container">
+  <div class="grid">
+
+    <div class="card glow span7">
+      <h1>Расчёт экономических показателей</h1>
+      <p>Выберите показатель — форма ввода подстроится автоматически.</p>
+
+      <label>Показатель</label>
+      <select id="indicator"></select>
+
+      <div class="hint" id="formulaHint">Подсказка по формуле появится здесь…</div>
+
+      <div id="dynamicFields"></div>
+
+      <div class="actions">
+        <button class="btn" onclick="runCalculation()">Рассчитать</button>
+              <button class="btn secondary" type="button" onclick="clearFields()">Очистить</button>
+      </div>
+
+      <div id="result" class="out">Результат расчёта появится здесь…</div>
+    </div>
+
+    <div class="card span5">
+      <h2>Подсказки</h2>
+      <div class="hint" id="rightHint">
+        • Значения вводятся числами (можно с точкой).<br>
+        • Поддерживаются единицы измерения — просто смотри подпись поля.<br>
+        • Для проверки безработицы используем: <code>Безработные / Рабочая сила × 100</code>.
+      </div>
+
+      <hr>
+
+      <h3>Ваши данные (пример)</h3>
+      <p><strong>Безработные (2017–2024), тыс. чел:</strong><br>
+        121.0, 110.0, 102.0, 107.1, 86.8, 76.7, 68.7, 54.5
+      </p>
+      <p><strong>Рабочая сила (занятые+безработные), тыс. чел:</strong><br>
+        2155.7, 2146.3, 2110.9, 2126.5, 2150.4, 2167.4, 2213.1, 2235.2
+      </p>
+    </div>
+
+    
+
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/calc.js"></script>
+</body>
+</html>

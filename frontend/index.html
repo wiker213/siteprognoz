@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Главная</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-badge"></span>
+      <span>Прогноз</span>
+    </a>
+
+    <nav>
+       <a href="index.html" id="nav-home">Главная</a>
+      <a href="calc.html" id="nav-calc">Расчёт</a>
+      <a href="forecast.html" id="nav-forecast">Прогноз</a>
+      <a href="charts.html" id="nav-charts">Графики</a>
+      <a href="updates.html" id="nav-updates">Обновления</a>
+      <a href="login.html" id="nav-login">Вход</a>
+      <a href="register.html" id="nav-register">Регистрация</a>
+      <a href="account.html" id="nav-account">Кабинет</a>
+    </nav>
+  </div>
+</header>
+<script>
+  const map={"index.html":"nav-home","calc.html":"nav-calc","forecast.html":"nav-forecast","charts.html":"nav-charts","updates.html":"nav-updates"};
+  const file=location.pathname.split("/").pop()||"index.html";
+  const id=map[file]; if(id) document.getElementById(id).classList.add("active");
+</script>
+
+<div class="container">
+  <div class="grid">
+
+    <div class="card glow span7">
+      <h1>Прогнозирование и моделирование экономических показателей Ростовской области</h1>
+      <p>Инструмент для расчёта экономических показателей (ВРП, инфляция, безработица и др.) и прогнозирования временных рядов (Average / Moving / Holt-Winters).</p>
+
+      <div class="kpi" id="regionPills">
+        <span class="pill"><strong>Загрузка региона…</strong></span>
+      </div>
+
+      <div class="hint" id="regionDesc">
+        Подсказка: данные региона приходят с backend по <code>/region</code>.
+      </div>
+    </div>
+
+    <div class="card span5">
+      <h2>Что умеет сайт</h2>
+      <div class="hint">
+        • <strong>Расчёт</strong>: ввод исходных данных → расчёт показателей<br>
+        • <strong>Прогноз</strong>: временной ряд → прогноз 1/6/12 мес<br>
+        • <strong>Графики</strong>: визуализация прогнозируемых данных<br>
+      </div>
+      <div class="actions">
+        <a class="btn" href="calc.html">Перейти к расчёту</a>
+        <a class="btn secondary" href="forecast.html">Перейти к прогнозу</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer Section with Contact Information -->
+<footer>
+  <div class="contact-info">
+    <h3>Контактная информация</h3>
+    <p>Электронная почта: <a href="mailto:info@forecast.com">info@forecast.com</a></p>
+    <p>Телефон: +7 (123) 456-78-90</p>
+    <p>Адрес: ул. Прогнозная, д. 1, Москва, Россия</p>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script>
+  (async () => {
+    try{
+      const region = await (await fetch("http://127.0.0.1:8000/region")).json();
+      const pills = document.getElementById("regionPills");
+      pills.innerHTML = `
+        <span class="pill"><strong>Регион:</strong> ${region.name}</span>
+        <span class="pill"><strong>Площадь:</strong> ${region.area_km2} км²</span>
+        <span class="pill"><strong>Население:</strong> ${region.population}</span>
+        ${region.vrp ? `<span class="pill"><strong>ВРП:</strong> ${region.vrp}</span>` : ``}
+      `;
+      document.getElementById("regionDesc").innerHTML =
+        `<strong>Отрасли:</strong> ${(region.industries||[]).join(", ")}<br><br>${region.description || ""}`;
+    }catch(e){
+      document.getElementById("regionPills").innerHTML =
+        `<span class="pill"><strong>Не удалось загрузить регион</strong></span>`;
+    }
+  })();
+</script>
+
+</body>
+</html>

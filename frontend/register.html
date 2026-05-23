@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <h2>Регистрация</h2>
+
+    <p class="hint">
+      Создайте обычный пользовательский аккаунт.
+    </p>
+
+    <label>Логин</label>
+    <input id="username" placeholder="user123">
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="user@example.com">
+
+    <label>Пароль</label>
+    <input id="password" type="password" placeholder="Минимум 8 символов">
+
+    <button class="btn btn-wide" id="btnRegister">
+      Зарегистрироваться
+    </button>
+
+    <div id="registerStatus" class="out">
+      Заполните форму
+    </div>
+
+    <div class="hint small">
+      Уже есть аккаунт? <a href="login.html">Войти</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/register.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+
+1) Установи зависимости
+pip install -r requirements.txt
+
+2) Запуск сервера
+uvicorn app.main:app --reload
+
+Открой:
+- http://127.0.0.1:8000/  (проверка статуса)
+- http://127.0.0.1:8000/docs (Swagger)

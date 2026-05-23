@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Графики</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">
+      <span class="brand-badge"></span>
+      <span>Прогноз</span>
+    </a>
+
+    <nav>
+      <a href="index.html" id="nav-home">Главная</a>
+      <a href="calc.html" id="nav-calc">Расчёт</a>
+      <a href="forecast.html" id="nav-forecast">Прогноз</a>
+      <a href="charts.html" id="nav-charts">Графики</a>
+      <a href="updates.html" id="nav-updates">Обновления</a>
+      <a href="login.html" id="nav-login">Вход</a>
+      <a href="register.html" id="nav-register">Регистрация</a>
+      <a href="account.html" id="nav-account">Кабинет</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const map = {
+    "index.html": "nav-home",
+    "calc.html": "nav-calc",
+    "forecast.html": "nav-forecast",
+    "charts.html": "nav-charts",
+    "updates.html": "nav-updates",
+    "login.html": "nav-login",
+    "register.html": "nav-register",
+    "account.html": "nav-account"
+  };
+
+  const file = location.pathname.split("/").pop() || "index.html";
+  const id = map[file];
+
+  if (id) {
+    document.getElementById(id).classList.add("active");
+  }
+</script>
+
+<div class="container">
+  <div class="grid">
+
+    <div class="card glow span5">
+
+      <h1>Графики</h1>
+
+      <p>
+        Визуализация фактических и прогнозных значений временного ряда.
+      </p>
+
+      <label>Временной ряд</label>
+
+      <textarea id="series" rows="6" placeholder="например: 121,110,102,107.1,86.8,76.7,68.7,54.5"></textarea>
+      <label style="margin-top:10px;">Загрузить временной ряд из файла</label>
+
+      <input
+        type="file"
+        id="fileInput"
+        accept=".txt,.csv"
+      />
+
+      <div class="hint">
+        Файл может содержать числа через новую строку, точку с запятой, табуляцию или запятую.
+        Для дробей с десятичной запятой лучше использовать <code>;</code> или перенос строки.
+      </div>
+
+      <div class="row">
+
+        <div>
+          <label>Период</label>
+
+          <select id="horizon">
+            <option value="1">1 период</option>
+            <option value="6">6 периодов</option>
+            <option value="12" selected>12 периодов</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Отображать</label>
+
+          <select id="mode">
+            <option value="append" selected>Факт + прогноз</option>
+            <option value="forecastOnly">Только прогноз</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="hint">
+        <strong>Методы прогнозирования:</strong><br>
+        • <code>average</code> — константа по среднему значению<br>
+        • <code>moving</code> — константа по последним значениям<br>
+        • <code>holt</code> — Holt / экспоненциальное сглаживание с трендом<br>
+        • <code>neural</code> — нейросетевой прогноз MLP
+      </div>
+
+      <label style="margin-top:14px;">Сравнение методов</label>
+
+      <div style="display:grid; gap:10px; margin-top:10px;">
+
+        <label style="margin:0; display:flex; gap:10px; align-items:center;">
+          <input type="checkbox" id="m_avg" checked style="width:auto;">
+          Average
+        </label>
+
+        <label style="margin:0; display:flex; gap:10px; align-items:center;">
+          <input type="checkbox" id="m_mov" checked style="width:auto;">
+          Moving
+        </label>
+
+        <label style="margin:0; display:flex; gap:10px; align-items:center;">
+          <input type="checkbox" id="m_holt" checked style="width:auto;">
+          Holt
+        </label>
+
+        <label style="margin:0; display:flex; gap:10px; align-items:center;">
+          <input type="checkbox" id="m_neural" checked style="width:auto;">
+          Нейросеть MLP
+        </label>
+
+      </div>
+
+      <div class="actions">
+
+        <button class="btn" type="button" onclick="buildChart()">
+          Построить график
+        </button>
+
+       
+
+        <button class="btn secondary" type="button" onclick="exportPNG()">
+          Экспорт PNG
+        </button>
+
+      </div>
+
+      <div id="chartStatus" class="out">
+        Готово к построению…
+      </div>
+
+    </div>
+
+    <div class="card span7">
+
+      <h2>Визуализация</h2>
+
+      <p>
+        Наведи курсор на линии, чтобы увидеть значения.
+      </p>
+
+      <div class="chartWrap">
+        <canvas id="chart"></canvas>
+      </div>
+
+      <div class="hint">
+        Если график пустой — проверь backend:
+        <code>http://127.0.0.1:8000</code>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script src="js/api.js"></script>
+<script src="js/charts.js"></script>
+
+</body>
+</html>
