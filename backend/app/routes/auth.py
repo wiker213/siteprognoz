@@ -67,8 +67,6 @@ def register(
     db: Session = Depends(get_db),
 ):
     try:
-        # ВАЖНО: роль всегда user.
-        # Пользователь не может сам выбрать себе admin.
         return create_user(
             db=db,
             username=data.username,
@@ -116,10 +114,14 @@ def login(
         role=user.role,
     )
 
+    # Cookie оставляем как запасной вариант.
     _set_auth_cookie(response, token)
 
+    # Главное изменение: отправляем токен на frontend.
     return {
         "status": "ok",
+        "access_token": token,
+        "token_type": "bearer",
         "user": UserOut.model_validate(user).model_dump(),
     }
 
