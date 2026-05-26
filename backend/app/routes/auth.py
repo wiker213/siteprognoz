@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.auth import create_access_token
+from app.core.config import settings
 from app.core.dependencies import get_current_user
 from app.database import get_db
 from app.db_models import User
@@ -48,12 +49,26 @@ def _clear_failed_logins(ip: str) -> None:
     FAILED_LOGINS.pop(ip, None)
 
 
+def _set_auth_cookie(response: Response, token: str) -> None:
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        secure=settings.cookie_secure,
+        samesite="none",
+        max_age=settings.access_token_expire_minutes * 60,
+        path="/",
+    )
+
+
 @router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def register(
     data: UserRegister,
     db: Session = Depends(get_db),
 ):
     try:
+        # ВАЖНО: роль всегда user.
+        # Пользователь не может сам выбрать себе admin.
         return create_user(
             db=db,
             username=data.username,
@@ -72,6 +87,7 @@ def register(
 def login(
     data: UserLogin,
     request: Request,
+    response: Response,
     db: Session = Depends(get_db),
 ):
     ip = _client_ip(request)
@@ -100,16 +116,21 @@ def login(
         role=user.role,
     )
 
+    _set_auth_cookie(response, token)
+
     return {
         "status": "ok",
-        "access_token": token,
-        "token_type": "bearer",
         "user": UserOut.model_validate(user).model_dump(),
     }
 
 
 @router.post("/logout")
-def logout():
+def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        path="/",
+    )
+
     return {"status": "ok"}
 
 
