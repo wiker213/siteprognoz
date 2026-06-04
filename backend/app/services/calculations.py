@@ -2,11 +2,6 @@ from typing import Dict, Any
 
 
 def calculate_indicator(indicator: str, data: Dict[str, float]) -> Dict[str, Any]:
-    """
-    Возвращает:
-      - {"indicator": "...", "result": <число>}
-      - или {"error": "..."}
-    """
 
     try:
         if indicator == "vrp_production":

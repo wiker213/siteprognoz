@@ -114,10 +114,10 @@ def login(
         role=user.role,
     )
 
-    # Cookie оставляем как запасной вариант.
+
     _set_auth_cookie(response, token)
 
-    # Главное изменение: отправляем токен на frontend.
+
     return {
         "status": "ok",
         "access_token": token,
