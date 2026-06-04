@@ -72,22 +72,25 @@ def forecast_neural(values: List[float], horizon: int) -> List[float]:
     return result
 
 # --- Новый метод regression ---
-def forecast_regression(values: List[dict], horizon: int) -> List[float]:
+def forecast_regression(values: List[float], horizon: int) -> List[float]:
     """
-    values: список словарей с ключами K_trud, L, delta_K_trud, delta_L, epsilon
-    horizon: сколько периодов вперед
+    values: простой числовой ряд
+    horizon: количество прогнозируемых периодов
     """
     result = []
-    for i in range(horizon):
-        last = values[-1] if values else {"K_trud":1,"L":1,"delta_K_trud":0,"delta_L":0,"epsilon":0}
-        K = last.get("K_trud", 1)
-        L = last.get("L", 1)
-        dK = last.get("delta_K_trud", 0)
-        dL = last.get("delta_L", 0)
-        eps = last.get("epsilon", 0)
-        forecast = K * L + dK * dL + eps
-        result.append(round(float(forecast), 4))
-        values.append({"K_trud": K, "L": L, "delta_K_trud": dK, "delta_L": dL, "epsilon": eps})
+    series = list(values)
+
+    for _ in range(horizon):
+        # K_trud = 1, L = последний элемент ряда
+        # delta_L = разница между последними элементами
+        # delta_K_trud = 0, epsilon = 0
+        L = series[-1]
+        dL = series[-1] - series[-2] if len(series) > 1 else 0
+        forecast = 1 * L + 0 * dL + 0
+        forecast = round(float(forecast), 4)
+        result.append(forecast)
+        series.append(forecast)
+
     return result
 
 def run_forecast(method: str, values: List, horizon: int) -> List[float]:
