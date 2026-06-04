@@ -74,22 +74,21 @@ def forecast_neural(values: List[float], horizon: int) -> List[float]:
 # --- Новый метод regression ---
 def forecast_regression(values: List[float], horizon: int) -> List[float]:
     """
-    values: простой числовой ряд
+    Прогноз с учетом тренда ряда.
+    values: список чисел (обычный временной ряд)
     horizon: количество прогнозируемых периодов
     """
+    series = values.copy()
     result = []
-    series = list(values)
 
     for _ in range(horizon):
-        # K_trud = 1, L = последний элемент ряда
-        # delta_L = разница между последними элементами
-        # delta_K_trud = 0, epsilon = 0
         L = series[-1]
+        # Рассчитываем тренд как разницу между последними двумя значениями
         dL = series[-1] - series[-2] if len(series) > 1 else 0
-        forecast = 1 * L + 0 * dL + 0
+        forecast = L + dL
         forecast = round(float(forecast), 4)
         result.append(forecast)
-        series.append(forecast)
+        series.append(forecast)  # добавляем для следующего шага
 
     return result
 
