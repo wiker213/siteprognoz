@@ -74,23 +74,27 @@ def forecast_neural(values: List[float], horizon: int) -> List[float]:
 # --- Новый метод regression ---
 def forecast_regression(values: List[float], horizon: int) -> List[float]:
     """
-    Прогноз с учетом тренда ряда.
-    values: список чисел (обычный временной ряд)
-    horizon: количество прогнозируемых периодов
+    Линейная регрессия по временному ряду.
+    Строит модель y = a*x + b по всем введённым точкам
+    и прогнозирует следующие horizon периодов.
     """
-    series = values.copy()
-    result = []
+    arr = np.array(values, dtype=float)
 
-    for _ in range(horizon):
-        L = series[-1]
-        # Рассчитываем тренд как разницу между последними двумя значениями
-        dL = series[-1] - series[-2] if len(series) > 1 else 0
-        forecast = L + dL
-        forecast = round(float(forecast), 4)
-        result.append(forecast)
-        series.append(forecast)  # добавляем для следующего шага
+    if len(arr) == 0:
+        return []
 
-    return result
+    if len(arr) == 1:
+        return [round(float(arr[0]), 4)] * horizon
+
+    x = np.arange(len(arr), dtype=float)
+
+    # коэффициенты линейной модели: y = a*x + b
+    a, b = np.polyfit(x, arr, 1)
+
+    future_x = np.arange(len(arr), len(arr) + horizon, dtype=float)
+    forecast = a * future_x + b
+
+    return [round(float(v), 4) for v in forecast.tolist()]
 
 def run_forecast(method: str, values: List, horizon: int) -> List[float]:
     method = (method or "").lower().strip()
